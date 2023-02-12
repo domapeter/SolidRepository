@@ -1,8 +1,8 @@
 ﻿using Solid.Models.Interfaces;
 
-namespace Solid.Repository.Interfaces
+namespace Solid.UnitOfWork.Interfaces
 {
-    public interface IQueryRespository<T> where T : class, IEntity
+    public interface IQueryUnitOfWork<T> where T : class, IEntity
     {
         T Find(params object[] ids);
 

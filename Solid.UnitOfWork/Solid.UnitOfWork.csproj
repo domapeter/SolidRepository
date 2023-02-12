@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Solid.Models\Solid.Models.csproj" />
+    <ProjectReference Include="..\Solid.Repository\Solid.Repository.csproj" />
+  </ItemGroup>
+
 </Project>
