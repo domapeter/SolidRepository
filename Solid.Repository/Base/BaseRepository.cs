@@ -132,15 +132,12 @@ public class BaseRepository<T> : IRepository<T> where T : class, IEntity
     public T Update(T entity)
     {
         Entities.Update(entity);
-
-        //UpdateEntityInContext(entity);
         return entity;
     }
 
     public ValueTask<T> UpdateAsync(CancellationToken cancellationToken, T entity)
     {
         Entities.Update(entity);
-        //UpdateEntityInContext(entity);
         return ValueTask.FromResult(entity);
     }
 
