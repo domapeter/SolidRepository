@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Solid.UnitOfWork", "Solid.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Solid.Models", "Solid.Models\Solid.Models.csproj", "{04E4FC8B-5C74-464E-AAD2-8485C6938DB0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0FCAEC37-9C65-44AD-A49F-D7A7E648162F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Solid.Repository.UnitTest", "Solid.Repository.UnitTest\Solid.Repository.UnitTest.csproj", "{AC78B95A-B22C-404D-A902-FB8975EBA643}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,9 +31,16 @@ Global
 		{04E4FC8B-5C74-464E-AAD2-8485C6938DB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04E4FC8B-5C74-464E-AAD2-8485C6938DB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04E4FC8B-5C74-464E-AAD2-8485C6938DB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC78B95A-B22C-404D-A902-FB8975EBA643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC78B95A-B22C-404D-A902-FB8975EBA643}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC78B95A-B22C-404D-A902-FB8975EBA643}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC78B95A-B22C-404D-A902-FB8975EBA643}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AC78B95A-B22C-404D-A902-FB8975EBA643} = {0FCAEC37-9C65-44AD-A49F-D7A7E648162F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4DA14D9B-6ECD-4205-9E59-40DDD2B6CA26}

@@ -119,6 +119,11 @@ public class BaseRepository<T> : IRepository<T> where T : class, IEntity
         Context.Entry(entity).State = EntityState.Modified;
     }
 
+    public IList<Projection> GetProjections<Projection>(Expression<Func<T, Projection>> projector)
+    {
+        return Entities.Select(projector).ToList();
+    }
+
     public IPageResult<T> GetPagedResult(ISpecification<T> specification)
     {
         if (specification == null)
