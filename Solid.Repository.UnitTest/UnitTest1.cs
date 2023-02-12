@@ -13,6 +13,14 @@ namespace Solid.Repository.UnitTest
         [Test]
         public void Test1()
         {
+            //var repo = new BaseRepository<DummyClass>(null);
+
+            //var projects = repo.GetProjections(p => new DummyDTO()
+            //{
+            //    Id = p.Id,
+            //    Name = p.Name,
+            //}).Cast<DummyDTO>();
+
             Assert.Pass();
         }
     }

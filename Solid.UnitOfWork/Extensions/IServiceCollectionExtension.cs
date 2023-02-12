@@ -14,7 +14,7 @@ public static class IServiceCollectionExtension
         {ServiceLifetime.Singleton,service => service.AddSingleton(typeof(IUnitOfWork<>), typeof(BaseUnitOfWork<>)) },
     };
 
-    public static IServiceCollection AddRepositories(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
+    public static IServiceCollection AddUnitOfWorks(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
     {
         var func = LifetimeDict[serviceLifetime];
 

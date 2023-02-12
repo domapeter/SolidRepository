@@ -4,6 +4,14 @@ namespace Solid.Repository.Interfaces;
 
 public interface ICommandRepository<T> where T : class, IEntity
 {
+    ITransaction BeginTransaction();
+
+    ValueTask<ITransaction> BeginTransactionAsync(CancellationToken cancellationToken);
+
+    int SaveChanges();
+
+    ValueTask<int> SaveChangesAsync(CancellationToken cancellationToken);
+
     T Create(T entity);
 
     ValueTask<T> CreateAsync(CancellationToken cancellationToken, T entity);

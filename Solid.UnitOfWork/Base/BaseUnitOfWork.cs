@@ -13,6 +13,58 @@ public class BaseUnitOfWork<T> : IUnitOfWork<T> where T : class, IEntity
         this.repository = repository;
     }
 
+    public T Create(T entity)
+    {
+        repository.Create(entity);
+        repository.SaveChanges();
+        return entity;
+    }
+
+    public async ValueTask<T> CreateAsync(CancellationToken cancellationToken, T entity)
+    {
+        await repository.CreateAsync(cancellationToken, entity);
+        await repository.SaveChangesAsync(cancellationToken);
+        return entity;
+    }
+
+    public void Delete(params object[] ids)
+    {
+        repository.Delete(ids);
+        repository.SaveChanges();
+    }
+
+    public void Delete(T entity)
+    {
+        repository.Delete(entity);
+        repository.SaveChanges();
+    }
+
+    public async Task DeleteAsync(CancellationToken cancellationToken, params object[] ids)
+    {
+        await repository.DeleteAsync(cancellationToken, ids);
+        await repository.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteAsync(CancellationToken cancellationToken, T entity)
+    {
+        await repository.DeleteAsync(cancellationToken, entity);
+        await repository.SaveChangesAsync(cancellationToken);
+    }
+
+    public T Update(T entity)
+    {
+        repository.Update(entity);
+        repository.SaveChanges();
+        return entity;
+    }
+
+    public async ValueTask<T> UpdateAsync(CancellationToken cancellationToken, T entity)
+    {
+        await repository.UpdateAsync(cancellationToken, entity);
+        await repository.SaveChangesAsync(cancellationToken);
+        return entity;
+    }
+
     public T Find(params object[] ids) => repository.Find(ids);
 
     public ValueTask<T> FindAsync(CancellationToken cancellationToken, params object[] ids) => repository.FindAsync(cancellationToken, ids);

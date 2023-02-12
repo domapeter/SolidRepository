@@ -17,9 +17,30 @@ public class BaseRepository<T> : IRepository<T> where T : class, IEntity
         this.Context = context;
     }
 
+    public async ValueTask<int> SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        return await Context.SaveChangesAsync(cancellationToken);
+    }
+
+    public int SaveChanges()
+    {
+        return Context.SaveChanges();
+    }
+
+    public ITransaction BeginTransaction()
+    {
+        return new Transaction(Context.Database.BeginTransaction());
+    }
+
+    public async ValueTask<ITransaction> BeginTransactionAsync(CancellationToken cancellationToken)
+    {
+        return new Transaction(await Context.Database.BeginTransactionAsync(cancellationToken));
+    }
+
     public T Create(T entity)
     {
         Entities.Add(entity);
+
         return entity;
     }
 
@@ -78,11 +99,22 @@ public class BaseRepository<T> : IRepository<T> where T : class, IEntity
         {
             return Entities.ToList();
         }
-        var entities = GetWithIncludes(specification.Includes);
-        entities = entities.Where(specification.Filter);
-        var orderedentities = ApplyOrdering(specification.OrderByList, entities);
+
+        var orderedentities = GetFilteredOrdered(specification);
 
         return orderedentities.ToList();
+    }
+
+    public IReadOnlyList<EndResult> Get<EndResult>(ISpecification<T, EndResult> specification)
+    {
+        if (specification == null)
+        {
+            throw new ArgumentNullException(nameof(specification));
+        }
+
+        var orderedentities = GetFilteredOrdered(specification);
+
+        return orderedentities.Select(specification.Projection).ToList();
     }
 
     public async ValueTask<IReadOnlyList<T>> GetAsync(CancellationToken cancellationToken, ISpecification<T> specification = null)
@@ -91,37 +123,25 @@ public class BaseRepository<T> : IRepository<T> where T : class, IEntity
         {
             return await Entities.ToListAsync(cancellationToken);
         }
-        var entities = GetWithIncludes(specification.Includes);
-        entities = entities.Where(specification.Filter);
-        var orderedentities = ApplyOrdering(specification.OrderByList, entities);
+
+        var orderedentities = GetFilteredOrdered(specification);
 
         return await orderedentities.ToListAsync(cancellationToken);
     }
 
     public T Update(T entity)
     {
-        UpdateEntityInContext(entity);
+        Entities.Update(entity);
+
+        //UpdateEntityInContext(entity);
         return entity;
     }
 
     public ValueTask<T> UpdateAsync(CancellationToken cancellationToken, T entity)
     {
-        UpdateEntityInContext(entity);
+        Entities.Update(entity);
+        //UpdateEntityInContext(entity);
         return ValueTask.FromResult(entity);
-    }
-
-    private void UpdateEntityInContext(T entity)
-    {
-        if (Context.Entry(entity).State == EntityState.Detached)
-        {
-            Context.Attach(entity);
-        }
-        Context.Entry(entity).State = EntityState.Modified;
-    }
-
-    public IList<Projection> GetProjections<Projection>(Expression<Func<T, Projection>> projector)
-    {
-        return Entities.Select(projector).ToList();
     }
 
     public IPageResult<T> GetPagedResult(ISpecification<T> specification)
@@ -141,9 +161,7 @@ public class BaseRepository<T> : IRepository<T> where T : class, IEntity
 
         var skip = (pageNumber - 1) * pageSize;
 
-        var entities = GetWithIncludes(specification.Includes);
-        entities = entities.Where(specification.Filter);
-        var orderedentities = ApplyOrdering(specification.OrderByList, entities);
+        var orderedentities = GetFilteredOrdered(specification);
 
         var totalRecords = orderedentities.Count();
         var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
@@ -179,9 +197,7 @@ public class BaseRepository<T> : IRepository<T> where T : class, IEntity
 
         var skip = (pageNumber - 1) * pageSize;
 
-        var entities = GetWithIncludes(specification.Includes);
-        entities = entities.Where(specification.Filter);
-        var orderedentities = ApplyOrdering(specification.OrderByList, entities);
+        var orderedentities = GetFilteredOrdered(specification);
 
         var totalRecords = await orderedentities.CountAsync(cancellationToken);
         var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
@@ -200,7 +216,14 @@ public class BaseRepository<T> : IRepository<T> where T : class, IEntity
         };
     }
 
-    protected static IOrderedQueryable<T> ApplyOrdering(List<KeyValuePair<Expression<Func<T, object>>, SortDirection>> orderByList, IQueryable<T> entities)
+    protected virtual IQueryable<T> GetFilteredOrdered(ISpecification<T> specification)
+    {
+        var entities = GetWithIncludes(specification.Includes);
+        entities = entities.Where(specification.Filter);
+        return ApplyOrdering(specification.OrderByList, entities);
+    }
+
+    protected virtual IOrderedQueryable<T> ApplyOrdering(List<KeyValuePair<Expression<Func<T, object>>, SortDirection>> orderByList, IQueryable<T> entities)
     {
         if (orderByList == null || orderByList.Count == 0)
         {

@@ -10,3 +10,8 @@ public interface ISpecification<T>
 
     List<KeyValuePair<Expression<Func<T, object>>, SortDirection>> OrderByList { get; set; }
 }
+
+public interface ISpecification<T, EndResult> : ISpecification<T> where T : class, IEntity
+{
+    Expression<Func<T, EndResult>> Projection { get; set; }
+}
