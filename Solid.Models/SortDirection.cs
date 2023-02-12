@@ -1,8 +1,7 @@
-﻿namespace Solid.Models
+﻿namespace Solid.Models;
+
+public enum SortDirection
 {
-    public enum SortDirection
-    {
-        Ascending,
-        Descending,
-    }
+    Ascending,
+    Descending,
 }
