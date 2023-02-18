@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0FCAEC37-9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Solid.Repository.UnitTest", "test\Solid.Repository.UnitTest\Solid.Repository.UnitTest.csproj", "{AC78B95A-B22C-404D-A902-FB8975EBA643}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6348176A-D401-440D-AAC8-1184DBFDE065}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{1431887B-2E55-4D86-85A5-AB500ADE791F} = {6348176A-D401-440D-AAC8-1184DBFDE065}
+		{97656979-A491-4E05-8D89-3ABE8682C550} = {6348176A-D401-440D-AAC8-1184DBFDE065}
+		{04E4FC8B-5C74-464E-AAD2-8485C6938DB0} = {6348176A-D401-440D-AAC8-1184DBFDE065}
 		{AC78B95A-B22C-404D-A902-FB8975EBA643} = {0FCAEC37-9C65-44AD-A49F-D7A7E648162F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
