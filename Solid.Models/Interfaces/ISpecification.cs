@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace Solid.Models.Interfaces;
 
@@ -11,7 +12,7 @@ public interface ISpecification<T>
     List<KeyValuePair<Expression<Func<T, object>>, SortDirection>> OrderByList { get; set; }
 }
 
-public interface ISpecification<T, EndResult> : ISpecification<T> where T : class, IEntity
+public interface ISpecification<T, TEndResult> : ISpecification<T> where T : class, IEntity
 {
-    Expression<Func<T, EndResult>> Projection { get; set; }
+    Func<IQueryable<T>, IQueryable<TEndResult>> Projection { get; set; }
 }

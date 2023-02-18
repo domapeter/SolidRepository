@@ -76,4 +76,8 @@ public class BaseUnitOfWork<T> : IUnitOfWork<T> where T : class, IEntity
     public IPageResult<T> GetPagedResult(ISpecification<T> specification) => repository.GetPagedResult(specification);
 
     public ValueTask<IPageResult<T>> GetPagedResultAsync(CancellationToken cancellationToken, ISpecification<T> specification) => repository.GetPagedResultAsync(cancellationToken, specification);
+
+    public IReadOnlyList<TEndresult> Get<TEndresult>(ISpecification<T, TEndresult> specification) => repository.Get(specification);
+
+    public ValueTask<IReadOnlyList<TEndresult>> GetAsync<TEndresult>(CancellationToken cancellationToken, ISpecification<T, TEndresult> specification) => repository.GetAsync(cancellationToken, specification);
 }

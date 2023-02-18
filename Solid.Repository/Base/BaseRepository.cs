@@ -114,7 +114,19 @@ public class BaseRepository<T> : IRepository<T> where T : class, IEntity
 
         var orderedentities = GetFilteredOrdered(specification);
 
-        return orderedentities.Select(specification.Projection).ToList();
+        return specification.Projection.Invoke(orderedentities).ToList();
+    }
+
+    public async ValueTask<IReadOnlyList<EndResult>> GetAsync<EndResult>(CancellationToken cancellationToken, ISpecification<T, EndResult> specification)
+    {
+        if (specification == null)
+        {
+            throw new ArgumentNullException(nameof(specification));
+        }
+
+        var orderedentities = GetFilteredOrdered(specification);
+
+        return await specification.Projection.Invoke(orderedentities).ToListAsync(cancellationToken);
     }
 
     public async ValueTask<IReadOnlyList<T>> GetAsync(CancellationToken cancellationToken, ISpecification<T> specification = null)
@@ -161,17 +173,13 @@ public class BaseRepository<T> : IRepository<T> where T : class, IEntity
         var orderedentities = GetFilteredOrdered(specification);
 
         var totalRecords = orderedentities.Count();
-        var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
 
         var queryResult = orderedentities.Skip(skip).Take(pageSize);
 
         return new PageResult<T>()
         {
-            FirstPage = 1,
             CurrentPage = pageNumber,
-            LastPage = totalPages,
-            NextPage = (pageNumber + 1) <= totalPages ? (pageNumber + 1) : -1,
-            PreviousPage = (pageNumber - 1) >= 1 ? (pageNumber - 1) : -1,
+            TotalCount = totalRecords,
             Size = pageSize,
             Records = queryResult.ToList()
         };
@@ -197,17 +205,13 @@ public class BaseRepository<T> : IRepository<T> where T : class, IEntity
         var orderedentities = GetFilteredOrdered(specification);
 
         var totalRecords = await orderedentities.CountAsync(cancellationToken);
-        var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
 
         var queryResult = orderedentities.Skip(skip).Take(pageSize);
 
         return new PageResult<T>()
         {
-            FirstPage = 1,
+            TotalCount = totalRecords,
             CurrentPage = pageNumber,
-            LastPage = totalPages,
-            NextPage = (pageNumber + 1) <= totalPages ? (pageNumber + 1) : -1,
-            PreviousPage = (pageNumber - 1) >= 1 ? (pageNumber - 1) : -1,
             Size = pageSize,
             Records = await queryResult.ToListAsync(cancellationToken)
         };
@@ -216,7 +220,10 @@ public class BaseRepository<T> : IRepository<T> where T : class, IEntity
     protected virtual IQueryable<T> GetFilteredOrdered(ISpecification<T> specification)
     {
         var entities = GetWithIncludes(specification.Includes);
-        entities = entities.Where(specification.Filter);
+        if (specification.Filter != null)
+        {
+            entities = entities.Where(specification.Filter);
+        }
         return ApplyOrdering(specification.OrderByList, entities);
     }
 
