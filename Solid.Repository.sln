@@ -15,7 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Solid.Repository.UnitTest",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6348176A-D401-440D-AAC8-1184DBFDE065}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Solid.Repository.test.Common", "test\Solid.Repository.test.Common\Solid.Repository.test.Common.csproj", "{CC93FC55-58D5-4E11-BA58-3F1134B2B55E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Solid.Repository.test.Common", "test\Solid.Repository.test.Common\Solid.Repository.test.Common.csproj", "{CC93FC55-58D5-4E11-BA58-3F1134B2B55E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C6D552B3-8A47-447B-A25F-AD8661B68502}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\CI_build.yml = .github\workflows\CI_build.yml
+		.github\workflows\nuget_publish.yml = .github\workflows\nuget_publish.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
